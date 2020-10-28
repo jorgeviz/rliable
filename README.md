@@ -1,7 +1,8 @@
 # RLiable 
 
-<img src="docs/assets/rliable-logo.png" style="zoom:40%;" />
-
+<div align="center">
+<img src="docs/assets/rliable-logo.png" style="zoom:30%;" />
+</div>
 
 RLiable is an experiment parallelization framework for fast hyper-parameter tuning of reinforcement learning agents. It aims to fill the need for a distributable Spark/TF-compatible models that allows to scale experimentation in an easy and `reliable` way.
 
