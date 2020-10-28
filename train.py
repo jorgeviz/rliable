@@ -41,4 +41,5 @@ if __name__ == '__main__':
     model = models[cfg['class']](sc, cfg)
     # Start training
     model.train(training)
+    model.save()
     log(f"Finished training in {time.time()- st_time }")

@@ -24,7 +24,7 @@ def create_spark():
     return sc
 
 if __name__ == '__main__':
-    log(f"Starting {APP_NAME} predicting ...")
+    log(f"Starting {APP_NAME} evaluation ...")
     st_time = time.time()
     args = parse_predit_args()
     # load config
@@ -36,8 +36,7 @@ if __name__ == '__main__':
     testing = read_json(sc, args['test_file'])
     # Init model
     model = models[cfg['class']](sc, cfg)
-    # Load model  and predict
+    # Load model  and eval
     model.load_model()
-    model.predict(testing, args['output_file'])
-    # model.predict_debug(testing, args['output_file'])
+    model.evaluate(testing, args['output_file'])
     log(f"Finished predicting in {time.time() - st_time}")
