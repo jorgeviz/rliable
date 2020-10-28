@@ -58,7 +58,7 @@ class CountModel(BaseModel):
                 Output file Path
         """
         _mdl_count = self._mdl_count
-        preds = test.ZipWithIndex()\
+        preds = test.zipWithIndex()\
                     .map(lambda y: y[1] + _mdl_count)
 
         def _persist_preds(buff, val):
