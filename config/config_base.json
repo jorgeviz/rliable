@@ -1,0 +1,9 @@
+{
+    "class": "BaseModel",
+    "environment": "../../data/project/cart-pole.json",
+    "mdl_file": "weights/base.model",
+    "hp_params": {
+        "batch_size": 20,
+        "learning_rate": 1e-3
+    }
+}
