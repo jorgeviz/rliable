@@ -20,7 +20,7 @@ class CountModel(BaseModel):
     def save(self, *args):
         """ Save model values
         """
-        with open(self.cfg['mdl_file'], 'w') as jio:
+        with open(self.cfg['mdl_file'], 'w') as joi:
             joi.write(json.dumps({
                 "count": self._mdl_count,
                 "sum": self._mdl_sum
