@@ -59,12 +59,11 @@ class CountModel(BaseModel):
         """
         _mdl_count = self._mdl_count
         preds = test.zipWithIndex()\
-                    .map(lambda y: y[1] + _mdl_count)
-
-        def _persist_preds(buff, val):
-            buff.write(f"{val}\n")
-            return val
+                    .map(lambda y: y[1] + _mdl_count)\
+                    .collect()
 
         with open(outfile, 'w') as joi:
-            save_op = preds.map(lambda y: _persist_preds(joi, y))
-            log("Saved", save_op.count(), "predictions!")
+            for val in preds:
+                joi.write(f"{val}\n")
+        
+        log("Saved", len(preds), "predictions!")
