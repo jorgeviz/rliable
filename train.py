@@ -34,8 +34,9 @@ if __name__ == '__main__':
     log(f"Using {cfg['class']}")
     # create spark
     sc = create_spark()
-    # Load training data
-    training = read_json(sc, cfg['training_data'])
+    # Load environment configuration  
+    # - [TODO] : need to initialize environment based on env params
+    training = read_json(sc, cfg['environment'])
     # Init model
     model = models[cfg['class']](sc, cfg)
     # Start training

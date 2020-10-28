@@ -8,7 +8,8 @@ APP_NAME = "RLiable-v0.0.1"
 
 # -- Model configurations
 # model_conf = "config/config_base.json"
-model_conf = "config/config_dqn.json"
+# model_conf = "config/config_dqn.json"
+model_conf = "config/config_count.json"
 
 def validate_dirs(mcf):
     from pathlib import Path

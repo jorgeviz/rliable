@@ -1,7 +1,9 @@
 from models.base_model import BaseModel
 from models.dqn import DQN
+from models.count_model import CountModel
 
 models = {
     "BaseModel": BaseModel,
-    "QLearning": DQN
+    "DQN": DQN,
+    "CountModel": CountModel
 }
