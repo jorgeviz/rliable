@@ -75,7 +75,7 @@ def sample_random_hyperconfig(grid:dict, cfg:dict) -> dict:
             raise Exception(f"Invalid grid type: {k}")
     return hypercfg
 
-def run_crossvalidation(sc: SparkContext, training: pyspark.rdd, optim: dict, cfg: dict):
+def run_crossvalidation(sc: SparkContext, training: pyspark.rdd.RDD, optim: dict, cfg: dict):
     """ Main method to submit crossvalidation process 
 
     Parameters
