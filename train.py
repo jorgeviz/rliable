@@ -1,11 +1,10 @@
 """ RLiable single training module
 """
-import sys
 import time
 
 from pyspark import SparkConf, SparkContext
 
-from config.config import *
+from config.config import APP_NAME, load_conf
 from models import models
 from utils.misc import log, read_json
 

@@ -1,6 +1,5 @@
 import random
 import math
-from statistics import mean
 from sklearn.metrics.pairwise import cosine_similarity
 
 def get_primes(n_primes, st=2):

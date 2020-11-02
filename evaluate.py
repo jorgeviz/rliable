@@ -1,10 +1,9 @@
 """ RLiable single evaluation module
 """
-import sys
 import time
 from pyspark import SparkConf, SparkContext
 from models import models
-from config.config import *
+from config.config import APP_NAME, load_conf
 from utils.misc import parse_predit_args, log, read_json
 
 def create_spark():

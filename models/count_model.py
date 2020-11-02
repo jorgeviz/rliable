@@ -1,6 +1,6 @@
 import json
 from models.base_model import BaseModel
-from utils.misc import log, debug, read_json
+from utils.misc import log
 
 
 class CountModel(BaseModel):

@@ -4,6 +4,8 @@
 <img src="docs/assets/rliable-logo.png" style="zoom:30%;" />
 </div>
 
+![Code linting](https://github.com/jorgeviz/rliable/workflows/Code%20Linting/badge.svg)
+
 RLiable is an experiment parallelization framework for fast hyper-parameter tuning of reinforcement learning agents. It aims to fill the need for a distributable Spark/TF-compatible models that allows to scale experimentation in an easy and `reliable` way.
 
 
