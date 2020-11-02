@@ -71,7 +71,7 @@ def sample_random_hyperconfig(grid:dict, cfg:dict) -> dict:
     for k, v in grid.items():
         if isinstance(v, list):
             hypercfg['hp_params'][k] = random.choice(v)
-        if isinstance(v, tuple):
+        elif isinstance(v, tuple):
             hypercfg['hp_params'][k] = v[0] + random.uniform(0, 1) * (v[1] - v[0])
         else:
             raise Exception(f"Invalid grid type: {k}")
@@ -93,7 +93,7 @@ def run_crossvalidation(sc: SparkContext, training: RDD, optim: dict, cfg: dict)
     """
     hcfgs = {}
     for itrs in range(optim['max_iters']):
-        log(f"Running CV-{iters}")
+        log(f"Running CV-{itrs}")
         _hcfg = sample_random_hyperconfig(optim['grid'], cfg)
         hcfgs[itrs] = _hcfg
         model = models[_hcfg['class']](sc, _hcfg)
