@@ -4,6 +4,7 @@ import time
 import random
 import argparse
 import uuid
+import json
 
 from pyspark import SparkConf, SparkContext
 from pyspark.rdd import RDD
@@ -67,11 +68,11 @@ def sample_random_hyperconfig(grid:dict, cfg:dict) -> dict:
         "mdl_file": cfg['mdl_file'] + '-'+ str(uuid.uuid4()),
         "hp_params": {}
     }
-    for k,v in grid.items():
+    for k, v in grid.items():
         if isinstance(v, list):
             hypercfg['hp_params'][k] = random.choice(v)
         if isinstance(v, tuple):
-            hypercfg['hp_params'][k] = v[0] + random.uniform(0,1) * (v[1] - v[0])
+            hypercfg['hp_params'][k] = v[0] + random.uniform(0, 1) * (v[1] - v[0])
         else:
             raise Exception(f"Invalid grid type: {k}")
     return hypercfg
@@ -92,6 +93,7 @@ def run_crossvalidation(sc: SparkContext, training: RDD, optim: dict, cfg: dict)
     """
     hcfgs = {}
     for itrs in range(optim['max_iters']):
+        log(f"Running CV-{iters}")
         _hcfg = sample_random_hyperconfig(optim['grid'], cfg)
         hcfgs[itrs] = _hcfg
         model = models[_hcfg['class']](sc, _hcfg)
@@ -103,8 +105,10 @@ if __name__ == '__main__':
     st_time = time.time()
     # read arguments
     args = parse_args()
+    with open(args.optim_config, 'r') as f:
+        optconfig = json.load(f)
     # load config
-    cfg = load_conf(args.optim_config['config'])
+    cfg = load_conf(optconfig['config'])
     log(f"Using {cfg['class']}")
     # create spark
     sc = create_spark(args.optim_config['optim_name'], 
@@ -112,9 +116,6 @@ if __name__ == '__main__':
     # Load environment configuration  
     # - [TODO] : need to initialize environment based on env params
     training = read_json(sc, cfg['environment'])
-    # Init model
-    model = models[cfg['class']](sc, cfg)
-    # Start training
-    model.train(training)
-    model.save()
-    log(f"Finished training in {time.time()- st_time }")
+    # Run CV 
+    run_crossvalidation(sc, training, optconfig, cfg)
+    log(f"Finished optimization in {time.time()- st_time }")

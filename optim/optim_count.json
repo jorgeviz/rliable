@@ -9,6 +9,6 @@
         "name": "reward",
         "criteria": "max"
     },
-    "max_iters": 20,
+    "max_iters": 3,
     "convergence": 0.01
 }
