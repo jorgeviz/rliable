@@ -14,6 +14,7 @@ class CountModel(BaseModel):
         """ Count Model constructor
         """
         super().__init__(sc,cfg)
+        self._increment = cfg['hp_params'].get("increment", 1)
         self._mdl_count = 0
         self._mdl_sum = 0
     
@@ -58,8 +59,9 @@ class CountModel(BaseModel):
                 Output file Path
         """
         _mdl_count = self._mdl_count
+        _inc = self._increment
         preds = test.zipWithIndex()\
-                    .map(lambda y: y[1] + _mdl_count)\
+                    .map(lambda y: y[1] * (_inc) + _mdl_count)\
                     .collect()
 
         with open(outfile, 'w') as joi:

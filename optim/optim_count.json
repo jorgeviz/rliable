@@ -1,0 +1,14 @@
+{
+    "config": "config/config_count.json",
+    "optim_name": "RandomOptimCountModel",
+    "num_workers": 1,
+    "grid": {
+        "increment": [1,2,4,6]
+    },
+    "metric": {
+        "name": "reward",
+        "criteria": "max"
+    },
+    "max_iters": 20,
+    "convergence": 0.01
+}

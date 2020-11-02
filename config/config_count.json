@@ -3,5 +3,6 @@
     "environment": "../../data/project/count.json",
     "mdl_file": "weights/count.model",
     "hp_params": {
+        "increment": 2
     }
 }

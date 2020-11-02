@@ -1,4 +1,7 @@
 import os
+import json
+from pathlib import Path
+
 
 os.environ['PYSPARK_PYTHON'] = 'python3'
 os.environ['PYSPARK_DRIVER_PYTHON'] = 'python3'
@@ -12,14 +15,12 @@ APP_NAME = "RLiable-v0.0.1"
 model_conf = "config/config_count.json"
 
 def validate_dirs(mcf):
-    from pathlib import Path
     mdl_f = Path(os.path.abspath(mcf))
     if not os.path.exists(mdl_f.parent):
         os.makedirs(mdl_f.parent)
 
-def load_conf():
-    import json
-    with open(model_conf, 'r') as mf:
+def load_conf(mconf=model_conf):
+    with open(mconf, 'r') as mf:
         mdl_cnf = json.load(mf)
     assert 'class' in mdl_cnf, "No Model Class!"
     assert 'mdl_file' in mdl_cnf, "No Model output file!"
