@@ -111,8 +111,8 @@ if __name__ == '__main__':
     cfg = load_conf(optconfig['config'])
     log(f"Using {cfg['class']}")
     # create spark
-    sc = create_spark(args.optim_config['optim_name'], 
-                    args.optim_config['num_workers'])
+    sc = create_spark(optconfig['optim_name'], 
+                    optconfig['num_workers'])
     # Load environment configuration  
     # - [TODO] : need to initialize environment based on env params
     training = read_json(sc, cfg['environment'])
