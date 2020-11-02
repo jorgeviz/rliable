@@ -6,6 +6,7 @@ import argparse
 import uuid
 
 from pyspark import SparkConf, SparkContext
+from pyspark.rdd import RDD
 
 from config.config import APP_NAME, load_conf
 from models import models
@@ -75,14 +76,14 @@ def sample_random_hyperconfig(grid:dict, cfg:dict) -> dict:
             raise Exception(f"Invalid grid type: {k}")
     return hypercfg
 
-def run_crossvalidation(sc: SparkContext, training: pyspark.rdd.RDD, optim: dict, cfg: dict):
+def run_crossvalidation(sc: SparkContext, training: RDD, optim: dict, cfg: dict):
     """ Main method to submit crossvalidation process 
 
     Parameters
     ----------
     sc : SparkContext
         App context
-    training : pyspark.rdd
+    training : pyspark.rdd.RDD
         Training data or data config
     optim: dict
         Optimization config
