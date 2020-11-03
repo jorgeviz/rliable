@@ -59,7 +59,7 @@ class CountModel(BaseModel):
         _mdl_count = self._mdl_count
         _inc = self._increment
         preds_rdd = test.zipWithIndex()\
-                    .map(lambda y: (y[0], y[1] * (_inc) + _mdl_count))
+                    .map(lambda y: (y[0]['x'], y[1] * (_inc) + _mdl_count))
         mse = preds_rdd.map(lambda y: (y[0] - y[1])**2 ).sum()
         preds = preds_rdd.map(lambda y: y[1]).collect()
         log("Performed", len(preds), "predictions!")
