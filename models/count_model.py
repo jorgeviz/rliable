@@ -48,24 +48,21 @@ class CountModel(BaseModel):
             self._mdl_count = jd['count']
             self._mdl_sum = jd['sum']
 
-    def evaluate(self, test, outfile):
+    def evaluate(self, test):
         """ Evaluate method
 
             Params:
             ----
             test: pyspark.rdd
                 Test Data
-            outfile: str
-                Output file Path
         """
         _mdl_count = self._mdl_count
         _inc = self._increment
-        preds = test.zipWithIndex()\
-                    .map(lambda y: y[1] * (_inc) + _mdl_count)\
-                    .collect()
-
-        with open(outfile, 'w') as joi:
-            for val in preds:
-                joi.write(f"{val}\n")
+        preds_rdd = test.zipWithIndex()\
+                    .map(lambda y: (y[0], y[1] * (_inc) + _mdl_count))
+        mse = preds_rdd.map(lambda y: (y[0] - y[1])**2 ).sum()
+        preds = preds_rdd.map(lambda y: y[1]).collect()
+        log("Performed", len(preds), "predictions!")
+        return (preds, mse / len(preds))
         
-        log("Saved", len(preds), "predictions!")
+        

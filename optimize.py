@@ -77,7 +77,10 @@ def sample_random_hyperconfig(grid:dict, cfg:dict) -> dict:
             raise Exception(f"Invalid grid type: {k}")
     return hypercfg
 
-def run_crossvalidation(sc: SparkContext, training: RDD, optim: dict, cfg: dict):
+def run_crossvalidation(sc: SparkContext, 
+                    training: RDD,
+                    testing: RDD,
+                    optim: dict, cfg: dict):
     """ Main method to submit crossvalidation process 
 
     Parameters
@@ -96,9 +99,17 @@ def run_crossvalidation(sc: SparkContext, training: RDD, optim: dict, cfg: dict)
         log(f"Running CV-{itrs}")
         _hcfg = sample_random_hyperconfig(optim['grid'], cfg)
         hcfgs[itrs] = _hcfg
+        # instance and train model
         model = models[_hcfg['class']](sc, _hcfg)
         model.train(training)
         model.save()
+        # run evaluation in testing env
+        _preds, metric = model.evaluate(testing)
+        hcfgs[itrs]['metric'] = metric
+        # TODO: convergence validation
+        # TODO: best model selection based metric
+    from pprint import pprint
+    pprint(hcfgs)
 
 if __name__ == '__main__':
     log(f"Starting {APP_NAME} optimization ...")
@@ -116,6 +127,7 @@ if __name__ == '__main__':
     # Load environment configuration  
     # - [TODO] : need to initialize environment based on env params
     training = read_json(sc, cfg['environment'])
+    testing = read_json(sc, cfg['environment'])
     # Run CV 
-    run_crossvalidation(sc, training, optconfig, cfg)
+    run_crossvalidation(sc, training, testing, optconfig, cfg)
     log(f"Finished optimization in {time.time()- st_time }")

@@ -98,3 +98,7 @@ For model's addition to the pipeline, it has to be registered in the `__init__.p
 }
 ```
 
+## Use References
+
+- [Local Properties](https://mallikarjuna_g.gitbooks.io/spark/content/spark-sparkcontext-local-properties.html)
+- [Spark Job Scheduling](https://spark.apache.org/docs/latest/job-scheduling.html)
