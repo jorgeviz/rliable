@@ -5,6 +5,7 @@ import random
 import argparse
 import uuid
 import json
+from pprint import pformat
 
 from pyspark import SparkConf, SparkContext
 from pyspark.rdd import RDD
@@ -77,6 +78,25 @@ def sample_random_hyperconfig(grid:dict, cfg:dict) -> dict:
             raise Exception(f"Invalid grid type: {k}")
     return hypercfg
 
+def has_converged(metric: float, prev_metric:float, convergence:float) -> bool:
+    """ Convergence validation
+
+    Parameters
+    ----------
+    metric : float
+        Measured metric
+    prev_metric : float
+        Measured metric in prev step
+    convergence : float
+        Convergence threshold
+
+    Returns
+    -------
+    bool
+        True if metric has converged
+    """
+    return abs(metric - prev_metric) <= convergence
+
 def run_crossvalidation(sc: SparkContext, 
                     training: RDD,
                     testing: RDD,
@@ -95,6 +115,7 @@ def run_crossvalidation(sc: SparkContext,
         Base config
     """
     hcfgs = {}
+    metric_series = []
     for itrs in range(optim['max_iters']):
         log(f"Running CV-{itrs}")
         _hcfg = sample_random_hyperconfig(optim['grid'], cfg)
@@ -106,10 +127,18 @@ def run_crossvalidation(sc: SparkContext,
         # run evaluation in testing env
         _preds, metric = model.evaluate(testing)
         hcfgs[itrs]['metric'] = metric
-        # TODO: convergence validation
-        # TODO: best model selection based metric
-    from pprint import pprint
-    pprint(hcfgs)
+        # convergence validation
+        if has_converged(metric, metric_series[-1][1], optim['convergence']):
+            break
+        metric_series.append((itrs, metric))
+    # best model selection based metric
+    best_model = hcfgs[
+        sorted(
+            metric_series, key=lambda s: s[1], 
+            reverse=(optim['metric']['criteria'] == 'max')
+        )[0]
+    ]
+    print("Best performed model:\n", pformat(best_model))
 
 if __name__ == '__main__':
     log(f"Starting {APP_NAME} optimization ...")
