@@ -138,7 +138,7 @@ def run_crossvalidation(sc: SparkContext,
         sorted(
             metric_series, key=lambda s: s[1], 
             reverse=(optim['metric']['criteria'] == 'max')
-        )[0]
+        )[0][0]
     ]
     log("Best performed model:\n", pformat(best_model))
 
