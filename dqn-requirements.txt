@@ -1,0 +1,5 @@
+gym==0.10.11
+imageio==2.4.0
+Pillow==7.0.0
+tf-agents==0.6.0
+tensorflow==2.2.0
