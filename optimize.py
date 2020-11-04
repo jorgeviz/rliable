@@ -128,8 +128,10 @@ def run_crossvalidation(sc: SparkContext,
         _preds, metric = model.evaluate(testing)
         hcfgs[itrs]['metric'] = metric
         # convergence validation
-        if has_converged(metric, metric_series[-1][1], optim['convergence']):
-            break
+        if itrs > 1:
+            if has_converged(metric, metric_series[-1][1], optim['convergence']):
+                log(f"Optimization has converged in {itrs} iterations")
+                break
         metric_series.append((itrs, metric))
     # best model selection based metric
     best_model = hcfgs[
@@ -138,7 +140,7 @@ def run_crossvalidation(sc: SparkContext,
             reverse=(optim['metric']['criteria'] == 'max')
         )[0]
     ]
-    print("Best performed model:\n", pformat(best_model))
+    log("Best performed model:\n", pformat(best_model))
 
 if __name__ == '__main__':
     log(f"Starting {APP_NAME} optimization ...")
