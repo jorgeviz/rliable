@@ -97,11 +97,11 @@ def has_converged(metric: float, prev_metric:float, convergence:float) -> bool:
     """
     return abs(metric - prev_metric) <= convergence
 
-def run_crossvalidation(sc: SparkContext, 
+def serial_run_crossvalidation(sc: SparkContext, 
                     training: RDD,
                     testing: RDD,
                     optim: dict, cfg: dict):
-    """ Main method to submit crossvalidation process 
+    """ Serial implementation of crossvalidation process 
 
     Parameters
     ----------
@@ -114,6 +114,7 @@ def run_crossvalidation(sc: SparkContext,
     cfg : dict
         Base config
     """
+    import pdb; pdb.set_trace()
     hcfgs = {}
     metric_series = []
     for itrs in range(optim['max_iters']):
@@ -160,5 +161,5 @@ if __name__ == '__main__':
     training = read_json(sc, cfg['environment'])
     testing = read_json(sc, cfg['environment'])
     # Run CV 
-    run_crossvalidation(sc, training, testing, optconfig, cfg)
+    serial_run_crossvalidation(sc, training, testing, optconfig, cfg)
     log(f"Finished optimization in {time.time()- st_time }")
