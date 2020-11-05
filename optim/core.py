@@ -24,6 +24,7 @@ def sample_random_hyperconfig(grid:dict, cfg:dict) -> dict:
     """
     hypercfg = { 
         "class": cfg['class'],
+        "environment": cfg['environment'],
         "mdl_file": cfg['mdl_file'] + '-'+ str(uuid.uuid4()),
         "hp_params": {}
     }
