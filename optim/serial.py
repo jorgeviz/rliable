@@ -1,7 +1,10 @@
+from pprint import pformat
 from pyspark import SparkContext
 from pyspark.rdd import RDD
 
 from optim.core import sample_random_hyperconfig, has_converged
+from models import models
+from utils.misc import log
 
 
 def serial_run_crossvalidation(sc: SparkContext, 

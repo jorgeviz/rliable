@@ -5,12 +5,11 @@ import random
 import argparse
 import uuid
 import json
-from pprint import pformat
 
 from pyspark import SparkConf, SparkContext
 
 from models import models
-from config.config import APP_NAME, load_con
+from config.config import APP_NAME, load_conf
 from utils.misc import log, read_env
 from optim.serial import serial_run_crossvalidation
 
