@@ -21,6 +21,7 @@ from tf_agents.policies import random_tf_policy
 from tf_agents.replay_buffers import tf_uniform_replay_buffer
 from tf_agents.trajectories import trajectory
 from tf_agents.utils import common
+from tf_agents.policies import policy_saver
 
 ######################################
 #  Hyper parameters
@@ -206,9 +207,10 @@ train(train_eval_returns)
 ######################################
 # Results
 ######################################
+import pdb; pdb.set_trace()
 try:
     import os
-    os.makedir(output_dir)
+    os.mkdir(output_dir)
 except:
     pass
 # Save training reward curve
