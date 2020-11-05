@@ -8,7 +8,7 @@ class BaseModel(object):
         self._sc = sc
         self.cfg = cfg
 
-    def train(self, data):
+    def train(self, data, *args):
         """ Training method
 
             Params:

@@ -4,7 +4,7 @@ import time
 from pyspark import SparkConf, SparkContext
 from models import models
 from config.config import APP_NAME, load_conf
-from utils.misc import parse_predit_args, log, read_json
+from utils.misc import parse_predit_args, log, read_env
 
 def create_spark():
     """ Method to create Spark Context
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     # create spark
     sc = create_spark()
     # Load testing data
-    testing = read_json(sc, args['test_file'])
+    testing = read_env(sc, args['test_file'])
     # Init model
     model = models[cfg['class']](sc, cfg)
     # Load model  and eval

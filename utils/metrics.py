@@ -58,16 +58,6 @@ def l2_norm(x):
     sum_sq = sum(sq_v)
     return math.sqrt(sum_sq)
 
-# def cosine_similarity(vx, vy):
-#     """ Cosine similarity of 2 n-dim vectors
-#     """ 
-#     sum_dot = sum([_x*vy[j] for j, _x in enumerate(vx)])
-#     vx_norm = l2_norm(vx)
-#     vy_norm = l2_norm(vx)
-#     if (vy_norm*vx_norm) == 0:
-#         return 0.0
-#     return sum_dot / (vy_norm*vx_norm)
-
 def pearson_correlation(rt):
     """ Pearson correlation of 2 
         sets of ratings
@@ -91,3 +81,32 @@ def pearson_correlation(rt):
     if rtc_n == 0:
         return 0
     return dot_rtc / rtc_n
+
+def compute_avg_return(environment, policy, num_episodes=10):
+    """ Computing average reward in N episodes
+
+    Parameters
+    ----------
+    environment: tf_agents.environemnts.tf_py_environment.TFPyEnvironment
+        Environment
+    policy : tf_agents.policies.Policy
+        Agent policy
+    num_episodes : int, optional
+        Num of episodes to eval, by default 10
+
+    Returns
+    -------
+    float
+        Average reward
+    """
+    total_return = 0.0
+    for _ in range(num_episodes):
+        time_step = environment.reset()
+        episode_return = 0.0
+        while not time_step.is_last():
+            action_step = policy.action(time_step)
+            time_step = environment.step(action_step.action)
+            episode_return += time_step.reward
+        total_return += episode_return
+    avg_return = total_return / num_episodes
+    return avg_return.numpy()[0]

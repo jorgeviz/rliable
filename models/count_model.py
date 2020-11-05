@@ -27,16 +27,16 @@ class CountModel(BaseModel):
                 "sum": self._mdl_sum
             }))
 
-    def train(self, data):
+    def train(self, tdata, *args):
         """ Training method
 
             Params:
             ----
-            data: pyspark.rdd
+            tdata: pyspark.rdd
                 Counting json data
         """
-        log("Training data:\n", data.take(4))
-        ds = data.map(lambda j: j['x'])
+        log("Training data:\n", tdata.take(4))
+        ds = tdata.map(lambda j: j['x'])
         self._mdl_count = ds.count()
         self._mdl_sum = ds.sum()
 

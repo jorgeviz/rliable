@@ -6,7 +6,7 @@ from pyspark import SparkConf, SparkContext
 
 from config.config import APP_NAME, load_conf
 from models import models
-from utils.misc import log, read_json
+from utils.misc import log, read_env
 
 def create_spark():
     """ Method to create Spark Context
@@ -34,11 +34,11 @@ if __name__ == '__main__':
     # create spark
     sc = create_spark()
     # Load environment configuration  
-    # - [TODO] : need to initialize environment based on env params
-    training = read_json(sc, cfg['environment'])
+    training = read_env(sc, cfg['environment'])
+    evaluation = read_env(sc, cfg['environment'])
     # Init model
     model = models[cfg['class']](sc, cfg)
     # Start training
-    model.train(training)
+    model.train(training, evaluation)
     model.save()
     log(f"Finished training in {time.time()- st_time }")
