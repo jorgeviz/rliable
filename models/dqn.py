@@ -26,15 +26,15 @@ class DQN(BaseModel):
         """
         super().__init__(sc,cfg)
         # hyper params
-        self.train_iters = cfg['hp_params']['train_iterations']
-        self.collect_steps_per_iter = cfg['hp_params'].get('collect_steps_per_iteration', 1)
-        self.batch_size = cfg['hp_params'].get('batch_size', 64)
+        self.train_iters = int(cfg['hp_params']['train_iterations'])
+        self.collect_steps_per_iter = int(cfg['hp_params'].get('collect_steps_per_iteration', 1))
+        self.batch_size = int(cfg['hp_params'].get('batch_size', 64))
         self.lr = cfg['hp_params'].get('learning_rate', 1e-3)
-        self.log_interval = cfg['hp_params'].get('log_interval', 200)
-        self.qnet_fc_hidden_size = (cfg['hp_params'].get('qnet_fc_hidden_size', 100),)
-        self.num_eval_episodes = cfg['hp_params'].get('num_eval_episodes', 10)
-        self.eval_interval = cfg['hp_params'].get('eval_interval', 1000)
-        self.replay_buffer_max_length = cfg['hp_params'].get('replay_buffer_max_length', 100000)
+        self.log_interval = int(cfg['hp_params'].get('log_interval', 200))
+        self.qnet_fc_hidden_size = (int(cfg['hp_params'].get('qnet_fc_hidden_size', 100)),)
+        self.num_eval_episodes = int(cfg['hp_params'].get('num_eval_episodes', 10))
+        self.eval_interval = int(cfg['hp_params'].get('eval_interval', 1000))
+        self.replay_buffer_max_length = int(cfg['hp_params'].get('replay_buffer_max_length', 100000))
         self.output_dir = Path(cfg['mdl_file'])
         # output dir validation
         if not self.output_dir.is_dir():
