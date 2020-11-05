@@ -1,5 +1,6 @@
 """ Single execution script for DQN training and evaluation
 """
+import os
 import base64
 import imageio
 import IPython
@@ -203,16 +204,15 @@ def train(returns):
 # call training
 train_eval_returns = []
 train(train_eval_returns)
-
+print("Best Avg Reward:", max(train_eval_returns))
 ######################################
 # Results
 ######################################
-import pdb; pdb.set_trace()
 try:
-    import os
     os.mkdir(output_dir)
-except:
+except FileExistsError:
     pass
+
 # Save training reward curve
 iterations = range(0, num_iterations + 1, eval_interval)
 plt.plot(iterations, train_eval_returns)
