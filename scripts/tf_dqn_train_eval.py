@@ -177,7 +177,7 @@ def train(returns):
 
     # Evaluate the agent's policy once before training.
     avg_return = compute_avg_return(eval_env, agent.policy, num_eval_episodes)
-    returns = [avg_return]
+    returns.append(avg_return)
 
     for _ in range(num_iterations):
         # Collect a few steps using collect_policy and save to the replay buffer.
@@ -197,7 +197,6 @@ def train(returns):
             print('step = {0}: Average Return = {1}'.format(step, avg_return))
             returns.append(avg_return)
 
-import pdb; pdb.set_trace()
 train_eval_returns = []
 train(train_eval_returns)
 iterations = range(0, num_iterations + 1, eval_interval)
