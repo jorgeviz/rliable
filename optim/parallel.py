@@ -5,14 +5,17 @@ from optim.core import sample_random_hyperconfig, has_converged
 from models import models
 from utils.misc import log
 
+training_env = None
+testing_env = None
+
 def train_eval_mapper(optim_row: tuple) -> tuple:
     itrs, _hcfg = optim_row
     # instance and train model
-    model = models[_hcfg['class']](sc, _hcfg)
-    model.train(training, testing)
+    model = models[_hcfg['class']]('sc', _hcfg)
+    model.train(training_env.value, testing_env.value)
     model.save()
     # run evaluation in testing env
-    _preds, metric = model.evaluate(testing)
+    _preds, metric = model.evaluate(testing_env.value)
     _hcfg['metric'] = metric
     return (itrs, _hcfg)
 
@@ -35,8 +38,12 @@ def parallel_run_crossvalidation(sc: SparkContext,
     cfg : dict
         Base config
     """
+    global training_env, testing_env
     if (optim['num_workers'] < 2):
         raise Exception("MapReduce optimization needs at least 2 workers!")
+    # broadcast envs
+    training_env = sc.broadcast(training)
+    testing_env = sc.broadcast(testing)
     hcfgs = {}
     metric_series = []
     for itrs in range(int(optim['max_iters'] / optim['num_workers'])):
@@ -49,7 +56,7 @@ def parallel_run_crossvalidation(sc: SparkContext,
         hcfgs.update(
             mpr_hcfgs.map(train_eval_mapper).collectAsMap()
         )
-        metric_series = [(_k, _h['metric']9 for _k, _h in hcfgs.items()]
+        metric_series = [(_k, _h['metric']) for _k, _h in hcfgs.items()]
         # convergence validation
         if itrs > 1:
             if has_converged(metric_series[-2][1], metric_series[-1][1], optim['convergence']):
