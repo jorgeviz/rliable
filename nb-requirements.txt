@@ -1,0 +1,26 @@
+Link to notebook: https://github.com/tensorflow/agents/blob/master/docs/tutorials/1_dqn_tutorial.ipynb
+
+To ensure that jupyter uses the selected venv (rl_env):
+python -m pip install ipykernel
+python -m ipykernel install --user --name=rl_env
+
+Ensure pip is updated to at least 19.0:
+pip install -U pip
+
+Tensorflow versions:
+pip install --upgrade tensorflow
+pip install tensorflow-probability==0.8.0
+pip install --force-reinstall tf-nightly
+pip install --force-reinstall tfp-nightly
+pip install --upgrade tf-agents-nightly
+pip install tf-estimator==2.1.0
+
+Versions in successful build:
+dm-reverb-nightly 	0.2.0.dev20201104
+tensorflow-estimator	2.1.0
+tensorflow-gpu		2.3.0
+tensorflow-probability	0.8.0
+tf-agents-nightly	0.7.0.dev20201104
+tf-estimator-nightly	2.4.0.dev2020102301
+tf-nightly		2.5.0.dev20201104
+tfp-nightly		0.12.0.dev20201104
