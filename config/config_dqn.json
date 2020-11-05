@@ -7,6 +7,7 @@
         "collect_steps_per_iteration": 1,
         "batch_size": 64,
         "learning_rate": 0.001,
-        "qnet_fc_hidden_size": 100
+        "qnet_fc_hidden_size": 100,
+        "num_eval_episodes": 200
     }
 }

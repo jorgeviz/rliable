@@ -171,7 +171,7 @@ class DQN(BaseModel):
         policy_dir = os.path.join(self.output_dir.as_posix(), 'policy')
         self.policy = tf.compat.v2.saved_model.load(policy_dir)
 
-    def evaluate(self, test):
+    def evaluate(self, test, num_eval_episodes=None):
         """ Evaluate method
 
             Params:
@@ -179,6 +179,8 @@ class DQN(BaseModel):
             test: tf_agents.environments.TFPyEnvironment
                 Test environments
         """
-        eval_avg_return = compute_avg_return(test, self.policy, self.num_eval_episodes)
+        if num_eval_episodes is None:
+            num_eval_episodes = self.num_eval_episodes
+        eval_avg_return = compute_avg_return(test, self.policy, num_eval_episodes)
         log("Eval Avg Reward:", eval_avg_return)
         return (eval_avg_return, eval_avg_return)
