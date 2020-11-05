@@ -114,7 +114,6 @@ def serial_run_crossvalidation(sc: SparkContext,
     cfg : dict
         Base config
     """
-    import pdb; pdb.set_trace()
     hcfgs = {}
     metric_series = []
     for itrs in range(optim['max_iters']):
@@ -145,7 +144,6 @@ def serial_run_crossvalidation(sc: SparkContext,
 
 if __name__ == '__main__':
     log(f"Starting {APP_NAME} optimization ...")
-    st_time = time.time()
     # read arguments
     args = parse_args()
     with open(args.optim_config, 'r') as f:
@@ -156,6 +154,7 @@ if __name__ == '__main__':
     # create spark
     sc = create_spark(optconfig['optim_name'], 
                     optconfig['num_workers'])
+    st_time = time.time()
     # Load environment configuration  
     # - [TODO] : need to initialize environment based on env params
     training = read_json(sc, cfg['environment'])
