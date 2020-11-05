@@ -1,0 +1,18 @@
+{
+    "config": "config/config_dqn.json",
+    "optim_name": "RandomOptimDQN",
+    "num_workers": 1,
+    "grid": {
+        "train_iterations": [1000, 2000, 4000],
+        "collect_steps_per_iteration": [1],
+        "batch_size": [32, 64],
+        "learning_rate": [0.001, 0.002, 0.005],
+        "qnet_fc_hidden_size": [100]
+    },
+    "metric": {
+        "name": "reward",
+        "criteria": "max"
+    },
+    "max_iters": 3,
+    "convergence": 0.01
+}

@@ -23,7 +23,7 @@ def parse_predit_args():
     """ Parse arguments
     """
     args = OrderedDict({
-        "test_file": str, "output_file": str
+        "test_file": str
     })
     for i, a in enumerate(args):
         args[a] = args[a](fetch_arg(i + 1))

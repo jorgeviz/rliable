@@ -24,18 +24,18 @@ def create_spark():
 
 if __name__ == '__main__':
     log(f"Starting {APP_NAME} evaluation ...")
-    st_time = time.time()
     args = parse_predit_args()
     # load config
     cfg = load_conf()
     log(f"Using {cfg['class']}")
     # create spark
     sc = create_spark()
+    st_time = time.time()
     # Load testing data
     testing = read_env(sc, args['test_file'])
     # Init model
     model = models[cfg['class']](sc, cfg)
     # Load model  and eval
     model.load_model()
-    model.evaluate(testing, args['output_file'])
+    model.evaluate(testing)
     log(f"Finished predicting in {time.time() - st_time}")

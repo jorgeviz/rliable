@@ -12,7 +12,7 @@ from pyspark.rdd import RDD
 
 from config.config import APP_NAME, load_conf
 from models import models
-from utils.misc import log, read_json
+from utils.misc import log, read_env
 
 def parse_args() -> argparse.Namespace:
     """ Method to parse cmd arguments
@@ -122,7 +122,7 @@ def serial_run_crossvalidation(sc: SparkContext,
         hcfgs[itrs] = _hcfg
         # instance and train model
         model = models[_hcfg['class']](sc, _hcfg)
-        model.train(training)
+        model.train(training, testing)
         model.save()
         # run evaluation in testing env
         _preds, metric = model.evaluate(testing)
@@ -156,9 +156,8 @@ if __name__ == '__main__':
                     optconfig['num_workers'])
     st_time = time.time()
     # Load environment configuration  
-    # - [TODO] : need to initialize environment based on env params
-    training = read_json(sc, cfg['environment'])
-    testing = read_json(sc, cfg['environment'])
+    training = read_env(sc, cfg['environment'])
+    testing = read_env(sc, cfg['environment'])
     # Run CV 
     serial_run_crossvalidation(sc, training, testing, optconfig, cfg)
     log(f"Finished optimization in {time.time()- st_time }")
