@@ -8,8 +8,8 @@ from utils.misc import log
 
 
 def serial_run_crossvalidation(sc: SparkContext, 
-                    training: RDD,
-                    testing: RDD,
+                    training,
+                    testing,
                     optim: dict, cfg: dict):
     """ Serial implementation of crossvalidation process 
 
@@ -17,8 +17,10 @@ def serial_run_crossvalidation(sc: SparkContext,
     ----------
     sc : SparkContext
         App context
-    training : pyspark.rdd.RDD
+    training : pyspark.rdd.RDD | tf_agents.environments.TFPyEnvironment
         Training data or data config
+    Testing : pyspark.rdd.RDD | tf_agents.environments.TFPyEnvironment
+        Eval/Testing data or data config
     optim: dict
         Optimization config
     cfg : dict

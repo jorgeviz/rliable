@@ -12,6 +12,7 @@ from models import models
 from config.config import APP_NAME, load_conf
 from utils.misc import log, read_env
 from optim.serial import serial_run_crossvalidation
+from optim.parallel import parallel_run_crossvalidation
 
 def parse_args() -> argparse.Namespace:
     """ Method to parse cmd arguments
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     testing = read_env(sc, cfg['environment'])
     # Run CV 
     if args.parallelized:
-        raise NotImplementedError
+        parallel_run_crossvalidation(sc, training, testing, optconfig, cfg)
     else:
         serial_run_crossvalidation(sc, training, testing, optconfig, cfg)
     log(f"Finished optimization in {time.time()- st_time }")
