@@ -12,7 +12,7 @@ from models import models
 from config.config import APP_NAME, load_conf
 from utils.misc import log, read_env
 from optim.serial import serial_run_crossvalidation
-from optim.parallel import parallel_run_crossvalidation
+from optim.parallel import parallel_run_crossvalidation, parallel_run_crossvalidation_v2
 
 def parse_args() -> argparse.Namespace:
     """ Method to parse cmd arguments
@@ -27,6 +27,8 @@ def parse_args() -> argparse.Namespace:
          help="Optimizatiion configuration path")
     parser.add_argument("--parallelized", action='store_true',
         default=False, help="Parallelization flag")
+    parser.add_argument("--plevel", type=int,
+        default=1, help="Parallelization Level")
     return parser.parse_args()
 
 def create_spark(optim_name:str, exec_workers:int ) -> SparkContext:
@@ -64,7 +66,11 @@ if __name__ == '__main__':
     testing = read_env(sc, cfg['environment'])
     # Run CV 
     if args.parallelized:
-        parallel_run_crossvalidation(sc, training, testing, optconfig, cfg)
+        if args.plevel == 1:
+            prun_cv_fn = parallel_run_crossvalidation
+        else:
+            prun_cv_fn = parallel_run_crossvalidation_v2
+        prun_cv_fn(sc, training, testing, optconfig, cfg)
     else:
         serial_run_crossvalidation(sc, training, testing, optconfig, cfg)
     log(f"Finished optimization in {time.time()- st_time }")
