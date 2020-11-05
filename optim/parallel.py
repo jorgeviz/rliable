@@ -3,19 +3,18 @@ from pyspark import SparkContext
 
 from optim.core import sample_random_hyperconfig, has_converged
 from models import models
-from utils.misc import log
-
-training_env = None
-testing_env = None
+from utils.misc import log, read_env
 
 def train_eval_mapper(optim_row: tuple) -> tuple:
     itrs, _hcfg = optim_row
+    training_env = read_env('sc', _hcfg['environment'])
+    testing_env = read_env('sc', _hcfg['environment'])
     # instance and train model
     model = models[_hcfg['class']]('sc', _hcfg)
-    model.train(training_env.value, testing_env.value)
+    model.train(training_env, testing_env)
     model.save()
     # run evaluation in testing env
-    _preds, metric = model.evaluate(testing_env.value)
+    _preds, metric = model.evaluate(testing_env)
     _hcfg['metric'] = metric
     return (itrs, _hcfg)
 
@@ -41,9 +40,6 @@ def parallel_run_crossvalidation(sc: SparkContext,
     global training_env, testing_env
     if (optim['num_workers'] < 2):
         raise Exception("MapReduce optimization needs at least 2 workers!")
-    # broadcast envs
-    training_env = sc.broadcast(training)
-    testing_env = sc.broadcast(testing)
     hcfgs = {}
     metric_series = []
     for itrs in range(int(optim['max_iters'] / optim['num_workers'])):
