@@ -1,4 +1,6 @@
 from pprint import pformat
+import math
+
 from pyspark import SparkContext
 
 from optim.core import sample_random_hyperconfig, has_converged
@@ -42,7 +44,7 @@ def parallel_run_crossvalidation(sc: SparkContext,
         raise Exception("MapReduce optimization needs at least 2 workers!")
     hcfgs = {}
     metric_series = []
-    for itrs in range(int(optim['max_iters'] / optim['num_workers'])):
+    for itrs in range(math.ceil(optim['max_iters'] / optim['num_workers'])):
         log(f"Running CV-{itrs} batch ({itrs * optim['num_workers']} - {(itrs+1) * optim['num_workers']})")
         # generate Iters / Num_Workers hyperconfigs
         mpr_hcfgs = sc.parallelize([
