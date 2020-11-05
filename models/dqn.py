@@ -32,8 +32,8 @@ class DQN(BaseModel):
         self.lr = cfg['hp_params'].get('learning_rate', 1e-3)
         self.log_interval = cfg['hp_params'].get('log_interval', 200)
         self.qnet_fc_hidden_size = tuple(cfg['hp_params'].get('qnet_fc_hidden_size', 100))
-        self.num_eval_episodes = cfg['hp_params'].get('train_iterations', 10)
-        self.eval_interval = cfg['hp_params'].get('train_iterations', 1000)
+        self.num_eval_episodes = cfg['hp_params'].get('num_eval_episodes', 10)
+        self.eval_interval = cfg['hp_params'].get('eval_interval', 1000)
         self.replay_buffer_max_length = cfg['hp_params'].get('replay_buffer_max_length', 100000)
         self.output_dir = Path(cfg['mdl_file'])
         # output dir validation
@@ -44,7 +44,7 @@ class DQN(BaseModel):
         self.optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=self.lr)
         self.train_step_counter = tf.Variable(0)
         self.agent = None
-        self.policy
+        self.policy = None
         # data vars
         self.train_env = None
         self.eval_env = None
