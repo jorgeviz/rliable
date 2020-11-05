@@ -40,6 +40,8 @@ qnet_fc_layer_params = (100,) # -- Q-network params
 num_eval_episodes = 10  # -- eval params 
 eval_interval = 1000  
 
+output_dir = "output"
+
 ######################################
 # Environments definition
 ######################################
@@ -197,12 +199,38 @@ def train(returns):
             print('step = {0}: Average Return = {1}'.format(step, avg_return))
             returns.append(avg_return)
 
+# call training
 train_eval_returns = []
 train(train_eval_returns)
+
+######################################
+# Results
+######################################
+try:
+    import os
+    os.makedir(output_dir)
+except:
+    pass
+# Save training reward curve
 iterations = range(0, num_iterations + 1, eval_interval)
 plt.plot(iterations, train_eval_returns)
 plt.ylabel('Average Return')
 plt.xlabel('Iterations')
 plt.ylim(top=250)
-plt.savefig("dqp_train_eval_returns.png", dpi=100)
-import pdb; pdb.set_trace()
+plt.savefig(output_dir+"/dqn_train_eval_returns.png", dpi=100)
+
+# Save agent and policy
+checkpoint_dir = os.path.join(output_dir, 'checkpoint')
+train_checkpointer = common.Checkpointer(
+    ckpt_dir=checkpoint_dir,
+    max_to_keep=1,
+    agent=agent,
+    policy=agent.policy,
+    replay_buffer=replay_buffer,
+    global_step=train_step_counter
+)
+policy_dir = os.path.join(output_dir, 'policy')
+tf_policy_saver = policy_saver.PolicySaver(agent.policy)
+
+train_checkpointer.save(train_step_counter)
+tf_policy_saver.save(policy_dir)
