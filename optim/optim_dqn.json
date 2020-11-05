@@ -3,11 +3,17 @@
     "optim_name": "RandomOptimDQN",
     "num_workers": 1,
     "grid": {
-        "train_iterations": [1000, 2000, 4000],
+        "train_iterations": {
+            "min": 1000,
+            "max": 4000
+        },
         "collect_steps_per_iteration": [1],
         "batch_size": [32, 64],
-        "learning_rate": [0.001, 0.002, 0.005],
-        "qnet_fc_hidden_size": [100]
+        "learning_rate": {
+            "min": 0.001, 
+            "max": 0.005
+        },
+        "qnet_fc_hidden_size": [20, 100, 400]
     },
     "metric": {
         "name": "reward",

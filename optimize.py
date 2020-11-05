@@ -25,6 +25,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--optim-config", type=str, required=True,
          help="Optimizatiion configuration path")
+    parser.add_argument("--parallelized", action='store_true',
+        default=False, help="Parallelization flag")
     return parser.parse_args()
 
 def create_spark(optim_name:str, exec_workers:int ) -> SparkContext:
@@ -72,8 +74,8 @@ def sample_random_hyperconfig(grid:dict, cfg:dict) -> dict:
     for k, v in grid.items():
         if isinstance(v, list):
             hypercfg['hp_params'][k] = random.choice(v)
-        elif isinstance(v, tuple):
-            hypercfg['hp_params'][k] = v[0] + random.uniform(0, 1) * (v[1] - v[0])
+        elif isinstance(v, dict):
+            hypercfg['hp_params'][k] = v['min'] + random.uniform(0, 1) * (v['max'] - v['min'])
         else:
             raise Exception(f"Invalid grid type: {k}")
     return hypercfg
@@ -116,7 +118,7 @@ def serial_run_crossvalidation(sc: SparkContext,
     """
     hcfgs = {}
     metric_series = []
-    for itrs in range(optim['max_iters']):
+    for itrs in range(int(optim['max_iters'])):
         log(f"Running CV-{itrs}")
         _hcfg = sample_random_hyperconfig(optim['grid'], cfg)
         hcfgs[itrs] = _hcfg
@@ -159,5 +161,8 @@ if __name__ == '__main__':
     training = read_env(sc, cfg['environment'])
     testing = read_env(sc, cfg['environment'])
     # Run CV 
-    serial_run_crossvalidation(sc, training, testing, optconfig, cfg)
+    if args.parallelized:
+        raise NotImplementedError
+    else:
+        serial_run_crossvalidation(sc, training, testing, optconfig, cfg)
     log(f"Finished optimization in {time.time()- st_time }")

@@ -133,7 +133,7 @@ class DQN(BaseModel):
         avg_return = compute_avg_return(self.eval_env, self.agent.policy, self.num_eval_episodes)
         self.eval_rewards.append(avg_return)
         # train loop
-        for _ in range(self.train_iters):
+        for _ in range(int(self.train_iters)):
             # Collect a few steps using collect_policy and save to the replay buffer.
             for _s in range(self.collect_steps_per_iter):
                 collect_step(self.train_env, self.agent.collect_policy, self.replay_buffer)
