@@ -165,7 +165,7 @@ def parallel_run_crossvalidation_v2(sc: SparkContext,
             (_j, sample_random_hyperconfig(optim['grid'], cfg))
             for _j in range(itrs * optim['num_workers'], (itrs+1) * optim['num_workers'])
         ])
-        _eval_episodes = min(optim['grid'].get("num_eval_episodes", [16]))
+        _eval_episodes = min(optim['grid'].get("num_test_episodes", [16]))
         hcfgs.update(
             mpr_hcfgs.map(train_mapper)\
                     .flatMap(lambda q: [

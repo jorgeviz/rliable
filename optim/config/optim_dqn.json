@@ -14,7 +14,8 @@
             "max": 0.005
         },
         "qnet_fc_hidden_size": [20, 100, 400],
-        "num_eval_episodes": [200]
+        "num_eval_episodes": [10],
+        "num_test_episodes": [200]
     },
     "metric": {
         "name": "reward",
