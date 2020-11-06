@@ -1,4 +1,7 @@
 from pprint import pformat
+import json
+import uuid
+from pathlib import Path
 from pyspark import SparkContext
 from pyspark.rdd import RDD
 
@@ -53,3 +56,6 @@ def serial_run_crossvalidation(sc: SparkContext,
         )[0][0]
     ]
     log("Best performed model:\n", pformat(best_model))
+    cv_results_path = (Path(cfg['mdl_file']).parent / f'single_cv-{uuid.uuid4()}.json').as_posix()
+    with open(cv_results_path, 'w') as f:
+        f.write(json.dumps(hcfgs))

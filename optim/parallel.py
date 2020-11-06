@@ -1,5 +1,8 @@
 from pprint import pformat
 import math
+import uuid
+import json
+from pathlib import Path
 
 from pyspark import SparkContext
 
@@ -129,6 +132,9 @@ def parallel_run_crossvalidation(sc: SparkContext,
         )[0][0]
     ]
     log("Best performed model:\n", pformat(best_model))
+    cv_results_path = (Path(cfg['mdl_file']).parent / f'parallel_cv_2-{uuid.uuid4()}.json').as_posix()
+    with open(cv_results_path, 'w') as f:
+        f.write(json.dumps(hcfgs))
 
 
 def parallel_run_crossvalidation_v2(sc: SparkContext, 
@@ -190,3 +196,6 @@ def parallel_run_crossvalidation_v2(sc: SparkContext,
         )[0][0]
     ]
     log("Best performed model:\n", pformat(best_model))
+    cv_results_path = (Path(cfg['mdl_file']).parent / f'parallel_cv_2-{uuid.uuid4()}.json').as_posix()
+    with open(cv_results_path, 'w') as f:
+        f.write(json.dumps(hcfgs))
