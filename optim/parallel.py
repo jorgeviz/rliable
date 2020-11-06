@@ -86,6 +86,7 @@ def parallel_run_crossvalidation(sc: SparkContext,
     """ Parallel MapReduce implementation of crossvalidation process.
         The jobs are splitted in batches depending on the amount of resources
         available, it performs training and evaluation process in one worker.
+        
     Parameters
     ----------
     sc : SparkContext

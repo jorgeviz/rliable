@@ -99,6 +99,8 @@ Alternative flags:
     └── misc.py
 ```
 
+### Custom Models
+
 Each model has 3 main methods `train`, `predict` and  `load_model`, and most inherit from the `BaseModel` class or ensure to handle within the class the configuration dict and PySpark Context.  
 
 ```python

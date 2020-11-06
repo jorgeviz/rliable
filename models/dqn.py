@@ -68,6 +68,7 @@ class DQN(BaseModel):
             self.train_env.action_spec(),
             q_network=self.q_net,
             optimizer=self.optimizer,
+            epsilon_greedy=0.1, # [TODO] - add the hyper param
             td_errors_loss_fn=common.element_wise_squared_loss,
             train_step_counter=self.train_step_counter
         )
