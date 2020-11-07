@@ -41,7 +41,7 @@ def serial_run_crossvalidation(sc: SparkContext,
         model.save()
         # run evaluation in testing env
         _preds, metric = model.evaluate(testing)
-        hcfgs[itrs]['metric'] = metric
+        hcfgs[itrs]['metric'] = float(metric)
         # convergence validation
         if itrs > 1:
             if has_converged(metric, metric_series[-1][1], optim['convergence']):

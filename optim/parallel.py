@@ -34,7 +34,7 @@ def train_eval_mapper(optim_row: tuple) -> tuple:
     model.save()
     # run evaluation in testing env
     _preds, metric = model.evaluate(testing_env)
-    _hcfg['metric'] = metric
+    _hcfg['metric'] = float(metric)
     return (itrs, _hcfg)
 
 def train_mapper(optim_row: tuple) -> tuple:
@@ -79,7 +79,7 @@ def eval_mapper(optim_row: tuple) -> tuple:
     model = models[_hcfg['class']]('sc', _hcfg)
     model.load_model()
     _preds, metric = model.evaluate(testing_env, n_eval_eps)
-    _hcfg['metric'] = metric
+    _hcfg['metric'] = float(metric)
     return (itrs, _hcfg)
 
 def parallel_run_crossvalidation(sc: SparkContext, 
