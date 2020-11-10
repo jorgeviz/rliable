@@ -5,7 +5,7 @@ from pathlib import Path
 from pyspark import SparkContext
 from pyspark.rdd import RDD
 
-from optim.core import sample_random_hyperconfig, has_converged
+from rliable.core import sample_random_hyperconfig, has_converged
 from models import models
 from utils.misc import log
 

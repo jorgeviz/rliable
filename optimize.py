@@ -11,8 +11,8 @@ from pyspark import SparkConf, SparkContext
 from models import models
 from config.config import APP_NAME, load_conf
 from utils.misc import log, read_env
-from optim.serial import serial_run_crossvalidation
-from optim.parallel import parallel_run_crossvalidation, parallel_run_crossvalidation_v2
+from rliable.serial import serial_run_crossvalidation
+from rliable.parallel import parallel_run_crossvalidation, parallel_run_crossvalidation_v2
 
 def parse_args() -> argparse.Namespace:
     """ Method to parse cmd arguments
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     st_time = time.time()
     # Load environment configuration  
     training = read_env(sc, cfg['environment'])
-    testing = read_env(sc, cfg['environment'])
+    testing = read_env(sc, cfg['environment'], max_episode_steps=1000)
     # Run CV 
     if args.parallelized:
         if args.plevel == 1:

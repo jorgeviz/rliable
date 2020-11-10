@@ -59,7 +59,7 @@ An example for the DQN implementation of the CartPole OpenAI environment has the
 Based on the specified optimization config file, we can run the process with the following command:
 
 ```bash
-python optimize.py optim/config/optim_dqn.json
+python optimize.py rliable/config/optim_dqn.json
 ```
 
 The implementation allows 3 different modes, single process, and parallelized level 1 and 2. For the level 1, the system spans batches of training-evaluation jobs per each of the workers available. For the level 2, it divides the training and evaluation process to allow parallelization on the rollouts dividing the load of interaction with the environment.
@@ -80,6 +80,12 @@ Alternative flags:
 
 ```
 ├── README.md
+├── rliable
+│   ├── config
+│   │     └── optim_dqn.json
+│   ├── core.py
+│   ├── serial.py
+│   └── parallel.py
 ├── docs
 │   └── assets
 ├── config

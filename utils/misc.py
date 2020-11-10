@@ -62,7 +62,7 @@ def read_csv(sc, fpath, with_heads=False):
         .map(lambda z: tuple(z[0].split(',')))
     return data
 
-def read_env(sc, environmnt):
+def read_env(sc, environmnt, max_episode_steps=None):
     """ Read environment 
     """
     # static files
@@ -71,7 +71,7 @@ def read_env(sc, environmnt):
             return read_json(sc, environmnt)
         return read_file(sc, environmnt)
     # suite env
-    _py_env = suite_gym.load(environmnt)
+    _py_env = suite_gym.load(environmnt, max_episode_steps=max_episode_steps)
     return tf_py_environment.TFPyEnvironment(_py_env)
 
 def collect_step(environment, policy, buffer):

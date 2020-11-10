@@ -6,7 +6,7 @@ from pathlib import Path
 
 from pyspark import SparkContext
 
-from optim.core import sample_random_hyperconfig, has_converged
+from rliable.core import sample_random_hyperconfig, has_converged
 from models import models
 from utils.misc import log, read_env
 
@@ -27,7 +27,7 @@ def train_eval_mapper(optim_row: tuple) -> tuple:
     """
     itrs, _hcfg = optim_row
     training_env = read_env('sc', _hcfg['environment'])
-    testing_env = read_env('sc', _hcfg['environment'])
+    testing_env = read_env('sc', _hcfg['environment'], max_episode_steps=1000)
     # instance and train model
     model = models[_hcfg['class']]('sc', _hcfg)
     model.train(training_env, testing_env)
@@ -74,7 +74,7 @@ def eval_mapper(optim_row: tuple) -> tuple:
         (iter number, hyperconfig dict with eval metric)
     """
     itrs, _hcfg, n_eval_eps = optim_row
-    testing_env = read_env('sc', _hcfg['environment'])
+    testing_env = read_env('sc', _hcfg['environment'], max_episode_steps=1000)
     # instance, load model and eval model
     model = models[_hcfg['class']]('sc', _hcfg)
     model.load_model()
@@ -103,7 +103,6 @@ def parallel_run_crossvalidation(sc: SparkContext,
     cfg : dict
         Base config
     """
-    global training_env, testing_env
     if (optim['num_workers'] < 2):
         raise Exception("MapReduce optimization needs at least 2 workers!")
     hcfgs = {}
@@ -160,7 +159,6 @@ def parallel_run_crossvalidation_v2(sc: SparkContext,
     cfg : dict
         Base config
     """
-    global training_env, testing_env
     if (optim['num_workers'] < 2):
         raise Exception("MapReduce optimization needs at least 2 workers!")
     hcfgs = {}
