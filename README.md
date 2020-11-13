@@ -21,6 +21,18 @@ Prerequisites:
 | Java | 1.8  |
 | Scala | 2.11  |
 
+*Note*: *A Linux (Debian-based) installation script is available in* `scripts/install_spark_hpc.sh`.
+
+### Install requirements
+
+- Create virtualenv and install Python dependencies
+
+```bash
+virtualenv -p $(which python3) env
+source env/bin/activate
+pip install -r requirements.txt
+pip install -r dqn-requirements.txt
+```
 
 ### Running experiments
 
@@ -32,7 +44,7 @@ An example for the DQN implementation of the CartPole OpenAI environment has the
 {
     "config": "config/config_dqn.json",
     "optim_name": "RandomOptimDQN",
-    "num_workers": 2,
+    "num_workers": 4,
     "grid": {
         "train_iterations": {
             "min": 1000,
@@ -67,14 +79,17 @@ The implementation allows 3 different modes, single process, and parallelized le
 Alternative flags:
 
 - `--parallelized`: Sets parallelized mode on
+
+```bash
+python optimize.py rliable/config/optim_dqn.json --parallelized
+```
+
 - `--plevel=LEVEL`: (Default 1), sets the level of parallelization described in train and eval processes.
 
+```bash
+python optimize.py rliable/config/optim_dqn.json --parallelized --plevel 2
+```
 
-### Visualizing Results
-
-- TODO
-
----
 
 ## Project Structure
 
@@ -107,7 +122,7 @@ Alternative flags:
 
 ### Custom Models
 
-Each model has 3 main methods `train`, `predict` and  `load_model`, and most inherit from the `BaseModel` class or ensure to handle within the class the configuration dict and PySpark Context.  
+Each model has 3 main methods `train`, `evaluate` and  `load_model`, and most inherit from the `BaseModel` class or ensure to handle within the class the configuration dict and PySpark Context.  
 
 ```python
 # models/base_model.py
